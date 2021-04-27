@@ -1,0 +1,15 @@
+{
+  "extends": ["prettier"],
+  "env": {
+  "node": true
+  },
+  "parserOptions": {
+  "ecmaVersion": 11,
+  "sourceType": "module"
+  },
+  "rules": {
+  "no-console": 0,
+  "space-in-parens": 1
+  },
+  "plugins": ["prettier"]
+}

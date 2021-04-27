@@ -43,9 +43,17 @@
         widget: () => {
           return this.element;
         },
-        refresh: () => { this._refresh(); },
+        refresh: () => {
+          this._refresh();
+        },
         getEditorInstance: () => {
           return this.editor$;
+        },
+        save: () => {
+          this._save();
+        },
+        getContent: () => {
+          return this.editor$.content.innerHTML;
         },
         widgetName: WIDGET_NAME,
         type: WIDGET_TYPE,
@@ -60,7 +68,7 @@
           this.options.ajaxIdentifier,
           {
             pageItems: $(this.options.itemsToSubmit, apex.gPageContext$),
-            x01: 'LOAD'
+            x01: "LOAD",
           },
           {
             refreshObject: "#" + this.editorId,
@@ -68,13 +76,16 @@
           }
         )
         .then((pData) => {
-          if ( pData.success) {
+          if (pData.success) {
             this.editor$.content.innerHTML = pData.hasData ? pData.content : "";
           }
         })
         .fail((jqXHR, textStatus, errorThrown) => {
           da.handleAjaxError(jqXHR, textStatus, errorThrown);
         });
+    },
+    _save: function () {
+      apex.mesaage.alert("Save called.");
     },
   });
 })(
