@@ -1,5 +1,4 @@
 {
-  "extends": ["prettier"],
   "env": {
   "node": true
   },
@@ -9,7 +8,7 @@
   },
   "rules": {
   "no-console": 0,
-  "space-in-parens": 1
+  "space-in-parens": ["error", "always"]
   },
   "plugins": ["prettier"]
 }
