@@ -1,3 +1,0 @@
-/*
-  Adds needed tables to showcase Pell Editor Plugin.
-*/
