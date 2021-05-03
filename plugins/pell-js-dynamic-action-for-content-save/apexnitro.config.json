@@ -1,0 +1,17 @@
+{
+  "mode": "basic",
+  "appName": "pelleditorsaver",
+  "appUrl": "https://apex.oracle.com/pls/apex/f?p=130859",
+  "srcFolder": "./src",
+  "launch": {
+    "port": 4000,
+    "ghostMode": false,
+    "notify": true,
+    "open": true,
+    "openBuilder": false
+  },
+  "upload": {
+    "destination": "application",
+    "credentialsPath": "./apexnitro.cred.json"
+  }
+}
