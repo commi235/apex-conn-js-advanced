@@ -85,7 +85,8 @@
         } );
     },
     _save: function () {
-      apex.mesaage.alert( "Save called." );
+      // Not implemented here, see saver plugin
+      apex.message.alert( "Save called." );
     },
   } );
 } )(
