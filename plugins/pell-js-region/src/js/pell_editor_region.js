@@ -6,7 +6,7 @@
   Then we are making it very clear which dependencies we have by using parameters
   for used modules and mapping then in the execution part of the IFFE.
 */
-( function ( pell, $, region, debug, server, da, event ) {
+(function (pell, $, region, debug, server, da, event) {
   const EDITOR_SUFFIX = "_editor";
   const WIDGET_NAMESPACE = "rwmk";
   const WIDGET_NAME = "pelleditorregion";
@@ -17,79 +17,75 @@
     As most APEX also uses jQuery Widgets for native page items and regions,
     it makes sense to utilize the same pattern.
   */
-  $.widget( WIDGET_TYPE, {
+  $.widget(WIDGET_TYPE, {
     options: {
       ajaxIdentifier: null,
       itemsToSubmit: null,
     },
     _create: function () {
-      debug.trace( "Start widget create.", { regionId: this.regionId } );
+      debug.trace("Start widget create.", { regionId: this.regionId });
       // We can use [0] here as the Widget Factory always hand in exactly one element
       this.regionId = this.element[0].id;
       this.editorId = this.regionId + EDITOR_SUFFIX;
       this.editorSelector = "#" + this.editorId;
 
-      this.editor$ = pell.init( {
-        element: document.getElementById( this.editorId ),
-        onChange: ( html ) => {
-          event.trigger( this.editorSelector, "change", {
+      this.editor$ = pell.init({
+        element: document.getElementById(this.editorId),
+        onChange: (html) => {
+          event.trigger(this.editorSelector, "change", {
             regionId: this.regionId,
             html: html,
-          } );
+          });
         },
-      } );
+      });
 
-      region.create( this.regionId, {
+      region.create(this.regionId, {
         widget: () => {
           return this.element;
         },
-        refresh: () => {
-          this._refresh();
-        },
+        refresh: () => { this._dataLoad(); },
         getEditorInstance: () => {
           return this.editor$;
         },
-        save: () => {
-          this._save();
-        },
-        getContent: () => {
-          return this.editor$.content.innerHTML;
-        },
+        save: () => { this._save(); },
+        getContent: () => { return this.editor$.content.innerHTML },
         widgetName: WIDGET_NAME,
         type: WIDGET_TYPE,
-      } );
-      debug.trace( "End widget create.", { regionId: this.regionId } );
+      });
+      debug.trace("End widget create.", { regionId: this.regionId });
+
+      // get data on start
+      this._dataLoad();
     },
-    _refresh: function () {
-      debug.trace( "Entering refresh.", this.regionId );
+    _dataLoad: function () {
+      debug.trace("Entering dataloading.", this.regionId);
       // Call Plugin callback here
-      server
-        .plugin(
+      server.plugin(
           this.options.ajaxIdentifier,
           {
-            pageItems: $( this.options.itemsToSubmit, apex.gPageContext$ ),
-            x01: "LOAD",
+            pageItems: $(this.options.itemsToSubmit, apex.gPageContext$),
+            x01: 'LOAD'
           },
           {
             refreshObject: "#" + this.editorId,
             loadingIndicator: "#" + this.editorId,
+            loadingIndicatorPosition: "centered"
           }
         )
-        .then( ( pData ) => {
-          if ( pData.success ) {
+        .then((pData) => {
+          if ( pData.success) {
             this.editor$.content.innerHTML = pData.hasData ? pData.content : "";
           }
-        } )
-        .fail( ( jqXHR, textStatus, errorThrown ) => {
-          da.handleAjaxError( jqXHR, textStatus, errorThrown );
-        } );
+        })
+        .fail((jqXHR, textStatus, errorThrown) => {
+          da.handleAjaxError(jqXHR, textStatus, errorThrown);
+        });
     },
-    _save: function () {
-      // Not implemented here, see saver plugin
-      apex.message.alert( "Save called." );
-    },
-  } );
-} )(
+    _save: function() {
+      apex.mesaage.alert("Save called.")
+    }
+  });
+})(
   pell,
   apex.jQuery,
   apex.region,
